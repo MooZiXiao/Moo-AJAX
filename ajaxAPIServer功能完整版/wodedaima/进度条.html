@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../static/css/bootstrap.css">
+  <style>
+    .progress {
+      width: 80%;
+      margin: 100px auto;
+    }
+    .progress-bar {
+      color : blue;
+      font-weight: 700;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 选择文件的按钮 -->
+  <input type="file" id="btn">
+  <!-- 进度条 -->
+  <div class="progress">
+    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%</div>
+  </div>
+</body>
+<script>
+
+let btn = document.querySelector('#btn');
+let bar = document.querySelector('.progress-bar');
+
+//图片
+btn.onchange = function(){
+    //
+    let file =  this.files[0];
+    //
+    let fd = new FormData();
+    fd.append('pic', file);
+    //
+    let xhr = new XMLHttpRequest();
+    xhr.open('post' , 'http://127.0.0.1:8080/uploadHeadImg');
+    xhr.upload.onprogress = function(e){
+        let percent = parseInt(e.loaded / e.total * 10000) / 100 + '%';
+        console.log(percent)
+        // bar.style.width = percent + '%';
+        // bar.innerText = percent + '%';
+    }
+    xhr.send(fd);
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4 && xhr.status === 200){
+            let res = JSON.parse(xhr.responseText);
+
+        }
+    }
+}
+</script>
+</html>
